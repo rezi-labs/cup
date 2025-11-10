@@ -32,7 +32,7 @@ fn main() {
             }
         }
         None => {
-             update::update(init::load_config().unwrap());
+            update::update(init::load_config().unwrap());
         }
     }
 }

@@ -11,42 +11,52 @@ use crate::{
 // Lazy static regex patterns compiled only once at startup
 // Pattern 1: name = version // comment or name = version # comment
 static VERSION_EXTRACT_RE_1: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(\w+)\s*=\s*([0-9]+\.[0-9]+\.[0-9]+)").expect("Failed to compile version extract regex 1")
+    Regex::new(r"(\w+)\s*=\s*([0-9]+\.[0-9]+\.[0-9]+)")
+        .expect("Failed to compile version extract regex 1")
 });
 static VERSION_REPLACE_RE_1: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(\w+\s*=\s*)([0-9]+\.[0-9]+\.[0-9]+)(\s*(?://|#).*)").expect("Failed to compile version replace regex 1")
+    Regex::new(r"(\w+\s*=\s*)([0-9]+\.[0-9]+\.[0-9]+)(\s*(?://|#).*)")
+        .expect("Failed to compile version replace regex 1")
 });
 
-// Pattern 2: name := version // comment or name := version # comment  
+// Pattern 2: name := version // comment or name := version # comment
 static VERSION_EXTRACT_RE_2: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(\w+)\s*:=\s*([0-9]+\.[0-9]+\.[0-9]+)").expect("Failed to compile version extract regex 2")
+    Regex::new(r"(\w+)\s*:=\s*([0-9]+\.[0-9]+\.[0-9]+)")
+        .expect("Failed to compile version extract regex 2")
 });
 static VERSION_REPLACE_RE_2: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(\w+\s*:=\s*)([0-9]+\.[0-9]+\.[0-9]+)(\s*(?://|#).*)").expect("Failed to compile version replace regex 2")
+    Regex::new(r"(\w+\s*:=\s*)([0-9]+\.[0-9]+\.[0-9]+)(\s*(?://|#).*)")
+        .expect("Failed to compile version replace regex 2")
 });
 
 // Pattern 3: name: version // comment or name: version # comment
 static VERSION_EXTRACT_RE_3: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(\w+):\s*([0-9]+\.[0-9]+\.[0-9]+)").expect("Failed to compile version extract regex 3")
+    Regex::new(r"(\w+):\s*([0-9]+\.[0-9]+\.[0-9]+)")
+        .expect("Failed to compile version extract regex 3")
 });
 static VERSION_REPLACE_RE_3: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(\w+:\s*)([0-9]+\.[0-9]+\.[0-9]+)(\s*(?://|#).*)").expect("Failed to compile version replace regex 3")
+    Regex::new(r"(\w+:\s*)([0-9]+\.[0-9]+\.[0-9]+)(\s*(?://|#).*)")
+        .expect("Failed to compile version replace regex 3")
 });
 
 // Pattern 4: "name:version" // comment
 static VERSION_EXTRACT_RE_4: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r#""(\w+):([0-9]+\.[0-9]+\.[0-9]+)""#).expect("Failed to compile version extract regex 4")
+    Regex::new(r#""(\w+):([0-9]+\.[0-9]+\.[0-9]+)""#)
+        .expect("Failed to compile version extract regex 4")
 });
 static VERSION_REPLACE_RE_4: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r#"("(\w+):)([0-9]+\.[0-9]+\.[0-9]+)(")(\s*(?://|#).*)"#).expect("Failed to compile version replace regex 4")
+    Regex::new(r#"("(\w+):)([0-9]+\.[0-9]+\.[0-9]+)(")(\s*(?://|#).*)"#)
+        .expect("Failed to compile version replace regex 4")
 });
 
 // Pattern 5: "name": "version" // comment
 static VERSION_EXTRACT_RE_5: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r#""(\w+)":\s*"([0-9]+\.[0-9]+\.[0-9]+)""#).expect("Failed to compile version extract regex 5")
+    Regex::new(r#""(\w+)":\s*"([0-9]+\.[0-9]+\.[0-9]+)""#)
+        .expect("Failed to compile version extract regex 5")
 });
 static VERSION_REPLACE_RE_5: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r#"("(\w+)":\s*")([0-9]+\.[0-9]+\.[0-9]+)(")(\s*(?://|#).*)"#).expect("Failed to compile version replace regex 5")
+    Regex::new(r#"("(\w+)":\s*")([0-9]+\.[0-9]+\.[0-9]+)(")(\s*(?://|#).*)"#)
+        .expect("Failed to compile version replace regex 5")
 });
 
 pub fn update(config: Config) {
@@ -81,6 +91,7 @@ fn single(target: &FileTarget) {
 struct FileTarget {
     file: FileInfo,
     row: i128,
+    #[expect(unused)]
     col: i128,
     extracted_config: Target,
 }
@@ -152,6 +163,7 @@ fn parse_cup_line(file_info: &FileInfo, line: &str, row: i128) -> Option<FileTar
 
 #[derive(Debug)]
 struct VersionInfo {
+    #[expect(unused)]
     version: String,
     col: i128,
 }
@@ -161,27 +173,33 @@ fn extract_version_from_line(line: &str) -> Option<VersionInfo> {
     if let Some(captures) = VERSION_EXTRACT_RE_1.captures(line) {
         let version = captures.get(2)?.as_str().to_string();
         let col = captures.get(2)?.start() as i128;
-        return Some(VersionInfo { version, col });
+        return Some(VersionInfo {
+            version: version,
+            col,
+        });
     }
-    
+
     if let Some(captures) = VERSION_EXTRACT_RE_2.captures(line) {
         let version = captures.get(2)?.as_str().to_string();
         let col = captures.get(2)?.start() as i128;
-        return Some(VersionInfo { version, col });
+        return Some(VersionInfo {
+            version: version,
+            col,
+        });
     }
-    
+
     if let Some(captures) = VERSION_EXTRACT_RE_3.captures(line) {
         let version = captures.get(2)?.as_str().to_string();
         let col = captures.get(2)?.start() as i128;
         return Some(VersionInfo { version, col });
     }
-    
+
     if let Some(captures) = VERSION_EXTRACT_RE_4.captures(line) {
         let version = captures.get(2)?.as_str().to_string();
         let col = captures.get(2)?.start() as i128;
         return Some(VersionInfo { version, col });
     }
-    
+
     if let Some(captures) = VERSION_EXTRACT_RE_5.captures(line) {
         let version = captures.get(2)?.as_str().to_string();
         let col = captures.get(2)?.start() as i128;
@@ -222,7 +240,6 @@ fn update_version_in_file(
     target: &FileTarget,
     new_version: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    // Read the current file content
     let content = std::fs::read_to_string(&target.file.full_path)?;
     let lines: Vec<&str> = content.lines().collect();
 
@@ -232,7 +249,6 @@ fn update_version_in_file(
 
     let line = lines[target.row as usize];
 
-    // Try each replacement pattern in order
     let updated_line = if let Some(updated) = try_replace_pattern_1(line, new_version) {
         updated
     } else if let Some(updated) = try_replace_pattern_2(line, new_version) {
@@ -247,12 +263,10 @@ fn update_version_in_file(
         return Err("No matching pattern found for version replacement".into());
     };
 
-    // Replace the line in the content
     let mut new_lines: Vec<String> = lines.iter().map(|s| s.to_string()).collect();
     new_lines[target.row as usize] = updated_line;
     let new_content = new_lines.join("\n");
 
-    // Write back to file
     std::fs::write(&target.file.full_path, new_content)?;
 
     Ok(())
@@ -260,9 +274,13 @@ fn update_version_in_file(
 
 fn try_replace_pattern_1(line: &str, new_version: &str) -> Option<String> {
     if VERSION_REPLACE_RE_1.is_match(line) {
-        Some(VERSION_REPLACE_RE_1.replace(line, |caps: &regex::Captures| {
-            format!("{}{}{}", &caps[1], new_version, &caps[3])
-        }).to_string())
+        Some(
+            VERSION_REPLACE_RE_1
+                .replace(line, |caps: &regex::Captures| {
+                    format!("{}{}{}", &caps[1], new_version, &caps[3])
+                })
+                .to_string(),
+        )
     } else {
         None
     }
@@ -270,9 +288,13 @@ fn try_replace_pattern_1(line: &str, new_version: &str) -> Option<String> {
 
 fn try_replace_pattern_2(line: &str, new_version: &str) -> Option<String> {
     if VERSION_REPLACE_RE_2.is_match(line) {
-        Some(VERSION_REPLACE_RE_2.replace(line, |caps: &regex::Captures| {
-            format!("{}{}{}", &caps[1], new_version, &caps[3])
-        }).to_string())
+        Some(
+            VERSION_REPLACE_RE_2
+                .replace(line, |caps: &regex::Captures| {
+                    format!("{}{}{}", &caps[1], new_version, &caps[3])
+                })
+                .to_string(),
+        )
     } else {
         None
     }
@@ -280,9 +302,13 @@ fn try_replace_pattern_2(line: &str, new_version: &str) -> Option<String> {
 
 fn try_replace_pattern_3(line: &str, new_version: &str) -> Option<String> {
     if VERSION_REPLACE_RE_3.is_match(line) {
-        Some(VERSION_REPLACE_RE_3.replace(line, |caps: &regex::Captures| {
-            format!("{}{}{}", &caps[1], new_version, &caps[3])
-        }).to_string())
+        Some(
+            VERSION_REPLACE_RE_3
+                .replace(line, |caps: &regex::Captures| {
+                    format!("{}{}{}", &caps[1], new_version, &caps[3])
+                })
+                .to_string(),
+        )
     } else {
         None
     }
@@ -290,9 +316,13 @@ fn try_replace_pattern_3(line: &str, new_version: &str) -> Option<String> {
 
 fn try_replace_pattern_4(line: &str, new_version: &str) -> Option<String> {
     if VERSION_REPLACE_RE_4.is_match(line) {
-        Some(VERSION_REPLACE_RE_4.replace(line, |caps: &regex::Captures| {
-            format!("{}{}{}{}", &caps[1], new_version, &caps[4], &caps[5])
-        }).to_string())
+        Some(
+            VERSION_REPLACE_RE_4
+                .replace(line, |caps: &regex::Captures| {
+                    format!("{}{}{}{}", &caps[1], new_version, &caps[4], &caps[5])
+                })
+                .to_string(),
+        )
     } else {
         None
     }
@@ -300,9 +330,13 @@ fn try_replace_pattern_4(line: &str, new_version: &str) -> Option<String> {
 
 fn try_replace_pattern_5(line: &str, new_version: &str) -> Option<String> {
     if VERSION_REPLACE_RE_5.is_match(line) {
-        Some(VERSION_REPLACE_RE_5.replace(line, |caps: &regex::Captures| {
-            format!("{}{}{}{}", &caps[1], new_version, &caps[4], &caps[5])
-        }).to_string())
+        Some(
+            VERSION_REPLACE_RE_5
+                .replace(line, |caps: &regex::Captures| {
+                    format!("{}{}{}{}", &caps[1], new_version, &caps[4], &caps[5])
+                })
+                .to_string(),
+        )
     } else {
         None
     }

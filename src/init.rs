@@ -1,8 +1,6 @@
-use clap::builder::Str;
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::fs;
-use std::path::PathBuf;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Config {

@@ -5,19 +5,6 @@ use std::io::Result;
 use std::path::{Path, PathBuf};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct EnvVar {
-    pub key: String,
-    pub line: u128,
-    pub col: u128,
-}
-
-impl EnvVar {
-    pub fn new(key: String, line: u128, col: u128) -> Self {
-        EnvVar { key, line, col }
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FileInfo {
     pub full_path: PathBuf,
     pub filename: String,
