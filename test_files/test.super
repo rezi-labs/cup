@@ -1,0 +1,9 @@
+
+
+
+test = 0.15.0 // [cup] GitHub rezi-labs/rezi-web
+test := 0.15.0 # [cup] GitHub rezi-labs/rezi-web
+test: 0.15.0 // [cup] GitHub rezi-labs/rezi-web
+"test:0.15.0" // [cup] GitHub rezi-labs/rezi-web
+"test": "0.15.0" // [cup] GitHub rezi-labs/rezi-web
+should_not_update = 1.1.0

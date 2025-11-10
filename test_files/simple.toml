@@ -1,0 +1,6 @@
+# Simple TOML test with standard version patterns
+version1 = 0.15.0 # [cup] GitHub rezi-labs/rezi-web
+version2 = 0.15.0 # [cup] rezi-labs/rezi-web
+version3 := 0.15.0 # [cup] rezi-labs/rezi-web
+version4: 0.15.0 # [cup] rezi-labs/rezi-web
+"version5": "0.15.0" # [cup] rezi-labs/rezi-web

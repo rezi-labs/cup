@@ -6,6 +6,8 @@ use std::fs;
 pub struct Config {
     /// instead of [cup] -> [your_string]
     pub cup_pattern: String,
+    /// default remote type when not specified (e.g., "GitHub")
+    pub remote_default: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -30,6 +32,7 @@ impl Default for Config {
     fn default() -> Self {
         Config {
             cup_pattern: "cup".to_string(),
+            remote_default: "GitHub".to_string(),
         }
     }
 }

@@ -27,7 +27,7 @@ fn main() {
         }
         Some(Commands::Init {}) => {
             if let Err(e) = init::init() {
-                eprintln!("Error initializing configuration: {}", e);
+                eprintln!("Error initializing configuration: {e}");
                 std::process::exit(1);
             }
         }
