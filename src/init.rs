@@ -6,7 +6,8 @@ use std::path::PathBuf;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Config {
-    pub file_types: Vec<String>,
+    /// instead of [cup] -> [your_string]
+    pub cup_pattern: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -29,7 +30,9 @@ pub enum Remote {
 
 impl Default for Config {
     fn default() -> Self {
-        Config { file_types: vec![] }
+        Config {
+            cup_pattern: "cup".to_string(),
+        }
     }
 }
 
