@@ -1,8 +1,10 @@
 use clap::{Parser, Subcommand};
 
+mod cup_parser;
 mod file_finder;
 mod init;
 mod update;
+mod version_extractor;
 
 #[derive(Debug, Parser)]
 #[command(name = "cup")]

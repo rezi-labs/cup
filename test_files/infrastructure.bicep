@@ -9,7 +9,7 @@ param nginxVersion string = '0.15.0' // [cup] rezi-labs/rezi-web
 // Variables using different syntax patterns
 var appVersion = '0.15.0' // [cup] rezi-labs/rezi-web
 var dbVersion := '0.15.0' // [cup] rezi-labs/rezi-web
-var redisVersion: '0.15.0' // [cup] rezi-labs/rezi-web
+var redisVersion: '0.15.0' # [cup] rezi-labs/rezi-web
 
 // Resource definitions
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
