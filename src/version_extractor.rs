@@ -18,7 +18,7 @@ pub struct VersionPattern {
 // Lazy static regex patterns compiled only once at startup
 // Pattern 1: name = version // comment or name = version # comment
 static VERSION_REPLACE_RE_1: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(\w+\s*=\s*)([0-9]*\.?[0-9]+(?:\.[0-9]+)*)(\s*(?://|#).*)")
+    Regex::new(r"(\w+\s*=\s*)([a-zA-Z0-9][a-zA-Z0-9\.\-_]*)(\s*(?://|#).*)")
         .expect("Failed to compile version replace regex 1")
 });
 
@@ -76,6 +76,48 @@ static VERSION_REPLACE_RE_10: Lazy<Regex> = Lazy::new(|| {
         .expect("Failed to compile version replace regex 10")
 });
 
+// Pattern 11: name = "version" // comment (double quotes)
+static VERSION_REPLACE_RE_11: Lazy<Regex> = Lazy::new(|| {
+    Regex::new(r#"(\w+\s*=\s*")([0-9]*\.?[0-9]+(?:\.[0-9]+)*)(")(\s*(?://|#).*)"#)
+        .expect("Failed to compile version replace regex 11")
+});
+
+// Pattern 12: name := "version" // comment (double quotes)
+static VERSION_REPLACE_RE_12: Lazy<Regex> = Lazy::new(|| {
+    Regex::new(r#"(\w+\s*:=\s*")([0-9]*\.?[0-9]+(?:\.[0-9]+)*)(")(\s*(?://|#).*)"#)
+        .expect("Failed to compile version replace regex 12")
+});
+
+// Pattern 13: name: "version" // comment (double quotes)
+static VERSION_REPLACE_RE_13: Lazy<Regex> = Lazy::new(|| {
+    Regex::new(r#"(\w+:\s*")([0-9]*\.?[0-9]+(?:\.[0-9]+)*)(")(\s*(?://|#).*)"#)
+        .expect("Failed to compile version replace regex 13")
+});
+
+// Pattern 14: "name-version" = "version" // comment (JSON-like with dashes)
+static VERSION_REPLACE_RE_14: Lazy<Regex> = Lazy::new(|| {
+    Regex::new(r#"("[\w-]+"\s*=\s*")([0-9]*\.?[0-9]+(?:\.[0-9]+)*)(")(\s*(?://|#).*)"#)
+        .expect("Failed to compile version replace regex 14")
+});
+
+// Pattern 15: name = "text-version" // comment (versions with text prefixes)
+static VERSION_REPLACE_RE_15: Lazy<Regex> = Lazy::new(|| {
+    Regex::new(r#"(\w+\s*=\s*")([a-zA-Z][\w\-\.]*[0-9]+(?:\.[0-9]+)*)(")(\s*(?://|#).*)"#)
+        .expect("Failed to compile version replace regex 15")
+});
+
+// Pattern 16: name := "text-version" // comment (versions with text prefixes)
+static VERSION_REPLACE_RE_16: Lazy<Regex> = Lazy::new(|| {
+    Regex::new(r#"(\w+\s*:=\s*")([a-zA-Z][\w\-\.]*[0-9]+(?:\.[0-9]+)*)(")(\s*(?://|#).*)"#)
+        .expect("Failed to compile version replace regex 16")
+});
+
+// Pattern 17: name: "text-version" // comment (versions with text prefixes)
+static VERSION_REPLACE_RE_17: Lazy<Regex> = Lazy::new(|| {
+    Regex::new(r#"(\w+:\s*")([a-zA-Z][\w\-\.]*[0-9]+(?:\.[0-9]+)*)(")(\s*(?://|#).*)"#)
+        .expect("Failed to compile version replace regex 17")
+});
+
 /// Array of all supported version patterns
 pub static VERSION_PATTERNS: &[VersionPattern] = &[
     VersionPattern {
@@ -117,6 +159,34 @@ pub static VERSION_PATTERNS: &[VersionPattern] = &[
     VersionPattern {
         replace_regex: &VERSION_REPLACE_RE_10,
         replacement_format: ReplacementFormat::Extended,
+    },
+    VersionPattern {
+        replace_regex: &VERSION_REPLACE_RE_11,
+        replacement_format: ReplacementFormat::Quoted,
+    },
+    VersionPattern {
+        replace_regex: &VERSION_REPLACE_RE_12,
+        replacement_format: ReplacementFormat::Quoted,
+    },
+    VersionPattern {
+        replace_regex: &VERSION_REPLACE_RE_13,
+        replacement_format: ReplacementFormat::Quoted,
+    },
+    VersionPattern {
+        replace_regex: &VERSION_REPLACE_RE_14,
+        replacement_format: ReplacementFormat::Quoted,
+    },
+    VersionPattern {
+        replace_regex: &VERSION_REPLACE_RE_15,
+        replacement_format: ReplacementFormat::Quoted,
+    },
+    VersionPattern {
+        replace_regex: &VERSION_REPLACE_RE_16,
+        replacement_format: ReplacementFormat::Quoted,
+    },
+    VersionPattern {
+        replace_regex: &VERSION_REPLACE_RE_17,
+        replacement_format: ReplacementFormat::Quoted,
     },
 ];
 

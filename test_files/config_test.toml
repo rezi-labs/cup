@@ -5,17 +5,17 @@ version = "1.0.0"
 
 [dependencies]
 # Explicit GitHub type
-rust_version = "1.70.0" # [cup] GitHub rezi-labs/rezi-web
+rust_version = "0.15.0" # [cup] GitHub rezi-labs/rezi-web
 
 # Fallback to remote_default (GitHub)
-vscode_version = "1.80.0" # [cup] rezi-labs/rezi-web
+vscode_version = "0.15.0" # [cup] rezi-labs/rezi-web
 
 # JSON-like TOML syntax with fallback
-"node-version" = "18.17.0" # [cup] rezi-labs/rezi-web
+"node-version" = "0.15.0" # [cup] rezi-labs/rezi-web
 
 [build]
 # Assignment with := syntax
-docker := "24.0.5" # [cup] rezi-labs/rezi-web
+docker := "0.15.0" # [cup] rezi-labs/rezi-web
 
 # Colon syntax
-typescript: "5.1.6" # [cup] rezi-labs/rezi-web
+typescript: "0.15.0" # [cup] rezi-labs/rezi-web

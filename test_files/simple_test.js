@@ -1,3 +1,3 @@
 // Simple fallback test
-version_explicit = "0.0.1" // [cup] GitHub microsoft/vscode
-version_fallback = "0.0.1" // [cup] microsoft/vscode
+version_explicit = "1.105.1" // [cup] GitHub microsoft/vscode
+version_fallback = "1.105.1" // [cup] microsoft/vscode

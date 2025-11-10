@@ -45,10 +45,22 @@ pub fn parse_cup_line(
         // Explicit GitHub type specified
         let github_part = after_cup.strip_prefix("GitHub")?.trim();
         let owner_repo = github_part.split_whitespace().next()?;
+        
+        // Validate that owner_repo contains a slash and valid format
+        if !owner_repo.contains('/') || owner_repo.len() < 3 {
+            return None;
+        }
+        
         (Remote::GitHub, owner_repo)
     } else if !after_cup.is_empty() {
         // No explicit type, use remote_default and treat the whole string as owner/repo
         let owner_repo = after_cup.split_whitespace().next()?;
+        
+        // Validate that owner_repo contains a slash and valid format
+        if !owner_repo.contains('/') || owner_repo.len() < 3 {
+            return None;
+        }
+        
         match config.remote_default.as_str() {
             "GitHub" => (Remote::GitHub, owner_repo),
             // Add more cases here when more remote types are supported

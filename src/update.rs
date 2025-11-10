@@ -99,6 +99,7 @@ fn process_file_targets(targets: &[FileTarget]) {
                 updated_count,
                 file_path.display()
             );
+            println!();
         }
     }
 }
@@ -125,12 +126,23 @@ fn get_latest_tag_from_github(target: &FileTarget) -> Result<String, Box<dyn std
     let sh = xshell::Shell::new()?;
     let owner_and_repo = target.extracted_config.tag.remote_tag.clone();
 
-    let res = xshell::cmd!(sh, "gh release view --repo {owner_and_repo} --json tagName")
+    // First try to get the latest release
+    if let Ok(res) = xshell::cmd!(sh, "gh release view --repo {owner_and_repo} --json tagName").read() {
+        if let Ok(tag_name) = serde_json::from_str::<LatestTag>(&res) {
+            return Ok(tag_name.tag_name);
+        }
+    }
+
+    // If release fails, try to get the latest tag
+    println!("release not found");
+    let res = xshell::cmd!(sh, "gh api repos/{owner_and_repo}/tags --jq '.[0].name'")
         .read()
-        .map_err(|e| format!("Failed to get release for {}: {}", owner_and_repo, e))?;
+        .map_err(|e| format!("Failed to get tags for {}: {}", owner_and_repo, e))?;
 
-    let tag_name: LatestTag = serde_json::from_str(&res)
-        .map_err(|e| format!("Failed to parse release data for {}: {}", owner_and_repo, e))?;
+    let tag_name = res.trim().to_string();
+    if tag_name.is_empty() {
+        return Err(format!("No tags found for repository {}", owner_and_repo).into());
+    }
 
-    Ok(tag_name.tag_name)
+    Ok(tag_name)
 }
