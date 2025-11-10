@@ -59,7 +59,8 @@ impl Config {
         let current_dir = env::current_dir().map_err(|e| e.to_string())?;
         let file_path = current_dir.join("cup.toml");
         if !file_path.exists() {
-            Err("Configuration does not exist".to_string())
+            // Fall back to default config when no config file exists
+            Ok(Config::default())
         } else {
             let raw = fs::read_to_string(file_path).map_err(|e| e.to_string())?;
             let c = toml::from_str(&raw).map_err(|e| e.to_string())?;
