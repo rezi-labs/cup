@@ -32,7 +32,7 @@ fn main() {
             }
         }
         None => {
-            println!("No command specified. Use --help for usage information.");
+             update::update(init::load_config().unwrap());
         }
     }
 }
